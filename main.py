@@ -1,4 +1,5 @@
 import os
+from os import system
 import hikari
 import random
 import datetime
@@ -67,5 +68,9 @@ async def message(event: hikari.GuildMessageCreateEvent) -> None:
           datetime.timezone.utc) + datetime.timedelta(seconds=10))
       await event.message.respond(hikari.Embed(title=f"hahaha"))
 
-
-bot.run()
+try:
+    bot.run()
+except hikari.errors.ClientHTTPResponseError:
+    print("\n\n\nBLOCKED BY RATE LIMITS\nRESTARTING NOW\n\n\n")
+    system('kill 1')
+    system("python restarter.py")
