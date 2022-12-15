@@ -91,6 +91,7 @@ async def register_commands(event: hikari.StartingEvent) -> None:
         bot.rest.slash_command_builder("info", "Learn something about the bot."),
         bot.rest.slash_command_builder("ephemeral", "Send a very secret message."),
         bot.rest.slash_command_builder("coba_api", "Send request to translator."),
+        bot.rest.slash_command_builder("cuaca", "Send weather of inputed city."),
     ]
 
     await bot.rest.set_application_commands(
@@ -130,10 +131,22 @@ async def handle_interactions(event: hikari.InteractionCreateEvent) -> None:
       headers = {
         "content-type": "application/x-www-form-urlencoded",
         "Accept-Encoding": "application/gzip",
-        "X-RapidAPI-Key": "SIGN-UP-FOR-KEY",
+        "X-RapidAPI-Key": "587f07c084msh0d2dbab8d8a3fa3p13e528jsn95e9062268fd",
         "X-RapidAPI-Host": "google-translate1.p.rapidapi.com"
       }
       response = requests.request("POST", url, data=payload, headers=headers)
+      await event.interaction.create_initial_response(
+        hikari.ResponseType.MESSAGE_CREATE,
+        response.text
+      )
+    elif event.interaction.command_name == "cuaca":
+      url = "https://weather-by-api-ninjas.p.rapidapi.com/v1/weather"
+      querystring = {"city":"yogyakarta"}
+      headers = {
+        "X-RapidAPI-Key": "587f07c084msh0d2dbab8d8a3fa3p13e528jsn95e9062268fd",
+        "X-RapidAPI-Host": "weather-by-api-ninjas.p.rapidapi.com"
+      }
+      response = requests.request("GET", url, headers=headers, params=querystring)
       await event.interaction.create_initial_response(
         hikari.ResponseType.MESSAGE_CREATE,
         response.text
