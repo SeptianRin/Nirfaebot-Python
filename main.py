@@ -24,6 +24,7 @@ async def message(event: hikari.GuildMessageCreateEvent) -> None:
   pilihan = []
   commandKerang = event.content[0:6]
   commandPersen = event.content[0:13]
+  commandReaksi = event.content[0:18]
   if commandKerang.lower() == "apakah":
     if (event.content.lower() == "apakah"):
       #ciduk
@@ -52,6 +53,15 @@ async def message(event: hikari.GuildMessageCreateEvent) -> None:
   if (commandPersen.lower() == "berapa persen"):
     await event.message.respond(f"Menurutku, {random.randint(1,100)}%")
 
+  if (commandReaksi.lower() == "reaksi nene gimana"):
+    listJawabanReaksi = [
+      "https://cdn.discordapp.com/attachments/479153760862601217/1051785620445466674/eww.jpeg",
+      "https://cdn.discordapp.com/attachments/479153760862601217/1051785620667760660/seriously.jpeg",
+      "https://cdn.discordapp.com/attachments/479153760862601217/1051785620898459668/nyanpasu.jpeg",
+      "https://media.discordapp.net/attachments/479153760862601217/1051878163266941028/hmpt.png?width=500&height=500",
+    ]
+    await event.message.respond(random.choice(listJawabanReaksi))
+
   # Command Framework 101 :D
   if event.content.startswith(PREFIX):
     if is_command("meme", event.content):
@@ -68,9 +78,10 @@ async def message(event: hikari.GuildMessageCreateEvent) -> None:
           datetime.timezone.utc) + datetime.timedelta(seconds=10))
       await event.message.respond(hikari.Embed(title=f"hahaha"))
 
+
 try:
-    bot.run()
-except hikari.errors.ClientHTTPResponseError:
-    print("\n\n\nBLOCKED BY RATE LIMITS\nRESTARTING NOW\n\n\n")
-    system('kill 1')
-    system("python restarter.py")
+  bot.run()
+except hikari.errors.HTTPResponseError:
+  print("\n\n\nBLOCKED BY RATE LIMITS\nRESTARTING NOW\n\n\n")
+  system("python restarter.py")
+  system('kill 1')
