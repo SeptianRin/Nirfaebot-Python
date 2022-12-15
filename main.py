@@ -3,6 +3,8 @@ from os import system
 import hikari
 import random
 import datetime
+import requests
+import simplejson as json
 from keep_alive import keep_alive
 
 keep_alive()
@@ -88,6 +90,7 @@ async def register_commands(event: hikari.StartingEvent) -> None:
         bot.rest.slash_command_builder("ping", "Get the bot's latency."),
         bot.rest.slash_command_builder("info", "Learn something about the bot."),
         bot.rest.slash_command_builder("ephemeral", "Send a very secret message."),
+        bot.rest.slash_command_builder("coba_api", "Send request to translator."),
     ]
 
     await bot.rest.set_application_commands(
@@ -121,6 +124,20 @@ async def handle_interactions(event: hikari.InteractionCreateEvent) -> None:
             "Only you can see this, keep it a secret :)",
             flags=hikari.MessageFlag.EPHEMERAL,
         )
+    elif event.interaction.command_name == "coba_api":
+      url = "https://google-translate1.p.rapidapi.com/language/translate/v2"
+      payload = "q=Hello%2C%20world!&target=es&source=en"
+      headers = {
+        "content-type": "application/x-www-form-urlencoded",
+        "Accept-Encoding": "application/gzip",
+        "X-RapidAPI-Key": "SIGN-UP-FOR-KEY",
+        "X-RapidAPI-Host": "google-translate1.p.rapidapi.com"
+      }
+      response = requests.request("POST", url, data=payload, headers=headers)
+      await event.interaction.create_initial_response(
+        hikari.ResponseType.MESSAGE_CREATE,
+        response.text
+      )
 
 try:
   bot.run()
