@@ -85,9 +85,12 @@ async def message(event: hikari.GuildMessageCreateEvent) -> None:
 async def register_commands(event: hikari.StartingEvent) -> None:
     """Register ping and info commands."""
     application = await bot.rest.fetch_application()
+    subcommands = hikari.CommandOption(
+      name="coba", description="coba"
+    )
 
     commands = [
-        bot.rest.slash_command_builder("ping", "Get the bot's latency."),
+        bot.rest.slash_command_builder("ping", "Get the bot's latency.").add_option(option=subcommands ),
         bot.rest.slash_command_builder("info", "Learn something about the bot."),
         bot.rest.slash_command_builder("ephemeral", "Send a very secret message."),
         bot.rest.slash_command_builder("coba_api", "Send request to translator."),
