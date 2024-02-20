@@ -56,7 +56,7 @@ async def message(event: hikari.GuildMessageCreateEvent) -> None:
   if (commandPersen.lower() == "berapa persen"):
     await event.message.respond(f"Menurutku, {random.randint(1,100)}%")
 
-  if (commandReaksi.lower() == "reaksi nene gimana"):
+  if (commandReaksi.lower() == "reaksi nene"):
     listJawabanReaksi = [
       "https://cdn.discordapp.com/attachments/479153760862601217/1051785620445466674/eww.jpeg",
       "https://cdn.discordapp.com/attachments/479153760862601217/1051785620667760660/seriously.jpeg",
