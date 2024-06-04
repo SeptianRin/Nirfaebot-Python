@@ -13,7 +13,6 @@ PREFIX = "ne "
 bot = hikari.GatewayBot(token=token, intents=hikari.Intents.ALL)
 COMMAND_GUILD_ID = hikari.UNDEFINED
 
-
 def is_command(cmd_name: str, content: str) -> bool:
   """Check if the message sent is a valid command."""
   return content == f"{PREFIX}{cmd_name}"
@@ -27,7 +26,7 @@ async def message(event: hikari.GuildMessageCreateEvent) -> None:
   pilihan = []
   commandKerang = event.content[0:6]
   commandPersen = event.content[0:13]
-  commandReaksi = event.content[0:18]
+  commandReaksi = event.content[0:11]
   if commandKerang.lower() == "apakah":
     if (event.content.lower() == "apakah"):
       #ciduk
@@ -81,79 +80,80 @@ async def message(event: hikari.GuildMessageCreateEvent) -> None:
           datetime.timezone.utc) + datetime.timedelta(seconds=10))
       await event.message.respond(hikari.Embed(title=f"hahaha"))
 
+
 @bot.listen()
 async def register_commands(event: hikari.StartingEvent) -> None:
-    """Register ping and info commands."""
-    application = await bot.rest.fetch_application()
-    subcommands = hikari.CommandOption(
-      name="coba", description="coba"
-    )
+  """Register ping and info commands."""
+  application = await bot.rest.fetch_application()
+  subcommands = hikari.CommandOption(name="coba", description="coba")
 
-    commands = [
-        bot.rest.slash_command_builder("ping", "Get the bot's latency.").add_option(option=subcommands ),
-        bot.rest.slash_command_builder("info", "Learn something about the bot."),
-        bot.rest.slash_command_builder("ephemeral", "Send a very secret message."),
-        bot.rest.slash_command_builder("coba_api", "Send request to translator."),
-        bot.rest.slash_command_builder("cuaca", "Send weather of inputed city."),
-    ]
+  commands = [
+    bot.rest.slash_command_builder(
+      "ping", "Get the bot's latency.").add_option(option=subcommands),
+    bot.rest.slash_command_builder("info", "Learn something about the bot."),
+    bot.rest.slash_command_builder("ephemeral", "Send a very secret message."),
+    bot.rest.slash_command_builder("coba_api", "Send request to translator."),
+    bot.rest.slash_command_builder("cuaca", "Send weather of inputed city."),
+  ]
 
-    await bot.rest.set_application_commands(
-        application=application.id,
-        commands=commands,
-        guild=COMMAND_GUILD_ID,
-    )
+  await bot.rest.set_application_commands(
+    application=application.id,
+    commands=commands,
+    guild=COMMAND_GUILD_ID,
+  )
+
 
 @bot.listen()
 async def handle_interactions(event: hikari.InteractionCreateEvent) -> None:
-    """Listen for slash commands being executed."""
-    if not isinstance(event.interaction, hikari.CommandInteraction):
-        # only listen to command interactions, no others!
-        return
+  """Listen for slash commands being executed."""
+  if not isinstance(event.interaction, hikari.CommandInteraction):
+    # only listen to command interactions, no others!
+    return
 
-    if event.interaction.command_name == "ping":
-        await event.interaction.create_initial_response(
-            hikari.ResponseType.MESSAGE_CREATE,
-            f"Pong! {bot.heartbeat_latency * 1_000:.0f}ms",
-        )
+  if event.interaction.command_name == "ping":
+    await event.interaction.create_initial_response(
+      hikari.ResponseType.MESSAGE_CREATE,
+      f"Pong! {bot.heartbeat_latency * 1_000:.0f}ms",
+    )
 
-    elif event.interaction.command_name == "info":
-        await event.interaction.create_initial_response(
-            hikari.ResponseType.MESSAGE_CREATE,
-            "Hello, this is an example bot written in hikari!",
-        )
+  elif event.interaction.command_name == "info":
+    await event.interaction.create_initial_response(
+      hikari.ResponseType.MESSAGE_CREATE,
+      "Hello, this is an example bot written in hikari!",
+    )
 
-    elif event.interaction.command_name == "ephemeral":
-        await event.interaction.create_initial_response(
-            hikari.ResponseType.MESSAGE_CREATE,
-            "Only you can see this, keep it a secret :)",
-            flags=hikari.MessageFlag.EPHEMERAL,
-        )
-    elif event.interaction.command_name == "coba_api":
-      url = "https://google-translate1.p.rapidapi.com/language/translate/v2"
-      payload = "q=Hello%2C%20world!&target=es&source=en"
-      headers = {
-        "content-type": "application/x-www-form-urlencoded",
-        "Accept-Encoding": "application/gzip",
-        "X-RapidAPI-Key": "587f07c084msh0d2dbab8d8a3fa3p13e528jsn95e9062268fd",
-        "X-RapidAPI-Host": "google-translate1.p.rapidapi.com"
-      }
-      response = requests.request("POST", url, data=payload, headers=headers)
-      await event.interaction.create_initial_response(
-        hikari.ResponseType.MESSAGE_CREATE,
-        response.text
-      )
-    elif event.interaction.command_name == "cuaca":
-      url = "https://weather-by-api-ninjas.p.rapidapi.com/v1/weather"
-      querystring = {"city":"yogyakarta"}
-      headers = {
-        "X-RapidAPI-Key": "587f07c084msh0d2dbab8d8a3fa3p13e528jsn95e9062268fd",
-        "X-RapidAPI-Host": "weather-by-api-ninjas.p.rapidapi.com"
-      }
-      response = requests.request("GET", url, headers=headers, params=querystring)
-      await event.interaction.create_initial_response(
-        hikari.ResponseType.MESSAGE_CREATE,
-        response.text
-      )
+  elif event.interaction.command_name == "ephemeral":
+    await event.interaction.create_initial_response(
+      hikari.ResponseType.MESSAGE_CREATE,
+      "Only you can see this, keep it a secret :)",
+      flags=hikari.MessageFlag.EPHEMERAL,
+    )
+  elif event.interaction.command_name == "coba_api":
+    url = "https://google-translate1.p.rapidapi.com/language/translate/v2"
+    payload = "q=Hello%2C%20world!&target=es&source=en"
+    headers = {
+      "content-type": "application/x-www-form-urlencoded",
+      "Accept-Encoding": "application/gzip",
+      "X-RapidAPI-Key": "587f07c084msh0d2dbab8d8a3fa3p13e528jsn95e9062268fd",
+      "X-RapidAPI-Host": "google-translate1.p.rapidapi.com"
+    }
+    response = requests.request("POST", url, data=payload, headers=headers)
+    await event.interaction.create_initial_response(
+      hikari.ResponseType.MESSAGE_CREATE, response.text)
+  elif event.interaction.command_name == "cuaca":
+    url = "https://weather-by-api-ninjas.p.rapidapi.com/v1/weather"
+    querystring = {"city": "yogyakarta"}
+    headers = {
+      "X-RapidAPI-Key": "587f07c084msh0d2dbab8d8a3fa3p13e528jsn95e9062268fd",
+      "X-RapidAPI-Host": "weather-by-api-ninjas.p.rapidapi.com"
+    }
+    response = requests.request("GET",
+                                url,
+                                headers=headers,
+                                params=querystring)
+    await event.interaction.create_initial_response(
+      hikari.ResponseType.MESSAGE_CREATE, response.text)
+
 
 try:
   bot.run()
