@@ -134,7 +134,7 @@ async def handle_interactions(event: hikari.InteractionCreateEvent) -> None:
     headers = {
       "content-type": "application/x-www-form-urlencoded",
       "Accept-Encoding": "application/gzip",
-      "X-RapidAPI-Key": "587f07c084msh0d2dbab8d8a3fa3p13e528jsn95e9062268fd",
+      "X-RapidAPI-Key": os.getenv("RAPIDAPI_KEY"),
       "X-RapidAPI-Host": "google-translate1.p.rapidapi.com"
     }
     response = requests.request("POST", url, data=payload, headers=headers)
@@ -144,7 +144,7 @@ async def handle_interactions(event: hikari.InteractionCreateEvent) -> None:
     url = "https://weather-by-api-ninjas.p.rapidapi.com/v1/weather"
     querystring = {"city": "yogyakarta"}
     headers = {
-      "X-RapidAPI-Key": "587f07c084msh0d2dbab8d8a3fa3p13e528jsn95e9062268fd",
+      "X-RapidAPI-Key": os.getenv("RAPIDAPI_KEY"),
       "X-RapidAPI-Host": "weather-by-api-ninjas.p.rapidapi.com"
     }
     response = requests.request("GET",
